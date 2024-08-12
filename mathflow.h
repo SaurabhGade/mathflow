@@ -70,6 +70,8 @@ void mat_scale(MAT dst, double scalar);
 
 //return equivalent upper traingular matrix of given matrix.
 void UTM(MAT dst, MAT src, unsigned char print_steps);
+
+//returns the determinant of a squre matrix... 'NOTE:ASSERTION ENABLED IF MATRIX IS NOT A SQURE MATRIX.
 double mat_det(MAT matrix);
 //return equivalent lower traingular matrix of given matrix.
 //void LTM(MAT dst, MAT src);
