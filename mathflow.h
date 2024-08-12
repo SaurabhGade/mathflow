@@ -146,7 +146,7 @@ void mat_randf(MAT m, double upper_bound, double lower_bound){
 void mat_rand(MAT m, double upper_bound, double lower_bound){
   for(size_t i = 0 ; i < m.rows; i++){
     for(size_t j = 0 ; j < m.cols; j++){
-      MAT_AT(m, i, j) = (int) (rand_double() * (upper_bound-lower_bound)+lower_bound); 
+      MAT_AT(m, i, j) =(int) (rand_double() * (upper_bound-lower_bound)+lower_bound); 
     }
   }
 }
