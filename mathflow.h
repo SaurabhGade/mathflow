@@ -71,10 +71,13 @@ void mat_scale(MAT dst, double scalar);
 //return equivalent upper traingular matrix of given matrix.
 void UTM(MAT dst, MAT src, unsigned char print_steps);
 
-//returns the determinant of a squre matrix... 'NOTE:ASSERTION ENABLED IF MATRIX IS NOT A SQURE MATRIX.
-double mat_det(MAT matrix);
+
 //return equivalent lower traingular matrix of given matrix.
-//void LTM(MAT dst, MAT src);
+void LTM(MAT dst, MAT src, unsigned char print_steps);
+
+
+//returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
+double mat_det(MAT matrix);
 
 
 
@@ -182,6 +185,7 @@ void mat_scale(MAT dst, double scalar){
     }
   }
 }
+
 void UTM(MAT dst, MAT src, unsigned char print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
@@ -212,17 +216,44 @@ void UTM(MAT dst, MAT src, unsigned char print_steps){
   }
   mat_free(&rx);
 }
+
+void LTM(MAT dst, MAT src, unsigned char print_steps){
+  MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
+  
+  MATH_ASSERT(src.rows == dst.rows);  //Dimensions of source must be equal to dimensions of Destination.
+  MATH_ASSERT(src.cols == dst.cols);
+   
+  mat_copy(dst, src);
+  double f;
+  MAT rx = mat_alloc(1, dst.cols);
+  for(long i = dst.rows-1; i >= 0 ; i--){
+    for(long j = i-1; j >= 0; j--){
+      mat_copy(rx, mat_row(dst, i));
+      f = (MAT_AT(rx, 0, i))? MAT_AT(dst,j,i)/MAT_AT(rx, 0, i): 0;
+      if( (MAT_AT(rx , 0, i) < 0 && MAT_AT(dst, j, i) >= 0) || (MAT_AT(rx, 0, i) >= 0 && MAT_AT(dst, j, i) < 0) ) {
+        if(f < 0) f *= -1;
+      }else{
+        if(f > 0) f *= -1;
+      }
+      mat_scale(rx, f);
+      mat_sum(mat_row(dst, j), rx);
+      if((int)print_steps)
+        MAT_PRINT(dst);
+    }
+  }
+  mat_free(&rx);
+}
+
+
 double mat_det(MAT matrix){
   double det = 1.0f;
   MAT utm = mat_alloc(matrix.rows , matrix.cols);
-  UTM(utm, matrix, 1);
+  LTM(utm, matrix, 1);
   for(size_t i = 0 ; i < matrix.rows; i++){
     det *= MAT_AT(utm,i,i);
   }
   return det;
 }
-//void LTM(MAT dst, MAT src){}
-
 
 void mat_print(MAT mat, char *name){
    MATH_PRINTF("%s[\n",name);
