@@ -58,6 +58,11 @@ void mat_rand(MAT m, double upper_bound, double lower_bound);
 //initilize matrix by std input. 
 void mat_scan(MAT m);
 
+
+//Returns the identity matrix of given dimensions.
+MAT mat_identity(size_t dim);
+
+
 //deallocate space used by the matrix.
 void mat_free(MAT *m);
 
@@ -86,13 +91,16 @@ void mat_dot(MAT dst, MAT src1, MAT src2);
 void mat_scale(MAT dst, double scalar);
 
 //return equivalent upper traingular matrix of given matrix.
-void UTM(MAT dst, MAT src, bool print_steps);
+void mat_utm(MAT dst, MAT src, bool print_steps);
 
 //return equivalent lower traingular matrix of given matrix.
-void LTM(MAT dst, MAT src, bool print_steps);
+void mat_ltm(MAT dst, MAT src, bool print_steps);
 
 //returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
 double mat_det(MAT matrix, bool print_steps);
+
+//convert given matrix in it's transpose.
+void mat_transpose(MAT m);
 
 //print matrix.
 void mat_print(MAT mat, char* name);
@@ -137,6 +145,17 @@ void mat_scan(MAT m){
     }
   }
 }
+
+
+MAT mat_identity(size_t dim){
+  MAT id = mat_alloc(dim, dim);
+  for(size_t i = 0 ; i < dim ; i++){
+    MAT_AT(id, i, i) = 1; 
+  }
+  return id;
+}
+
+
 void mat_free(MAT *m){
   if(m->es == NULL)
     return;
@@ -192,7 +211,7 @@ void mat_scale(MAT dst, double scalar){
   }
 }
 
-void UTM(MAT dst, MAT src, bool print_steps){
+void mat_utm(MAT dst, MAT src, bool print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
   MATH_ASSERT(src.rows == dst.rows);  //Dimensions of source must be equal to dimensions of Destination.
@@ -223,7 +242,7 @@ void UTM(MAT dst, MAT src, bool print_steps){
   mat_free(&rx);
 }
 
-void LTM(MAT dst, MAT src, bool print_steps){
+void mat_ltm(MAT dst, MAT src, bool print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
   MATH_ASSERT(src.rows == dst.rows);  //Dimensions of source must be equal to dimensions of Destination.
@@ -254,12 +273,25 @@ void LTM(MAT dst, MAT src, bool print_steps){
 double mat_det(MAT matrix, bool print_steps){
   double det = 1.0f;
   MAT utm = mat_alloc(matrix.rows , matrix.cols);
-  UTM(utm, matrix, print_steps);
+  mat_utm(utm, matrix, print_steps);
   for(size_t i = 0 ; i < matrix.rows; i++){
     det *= MAT_AT(utm,i,i);
   }
   return det;
 }
+
+void mat_transpose(MAT m){
+  MATH_ASSERT(m.rows == m.cols);
+
+  for(size_t i = 0 ; i < m.rows; i++){
+    for(size_t j = i+1 ; j < m.cols; j++){
+        double d = MAT_AT(m, i, j);
+        MAT_AT(m, i, j) = MAT_AT(m, j, i);
+        MAT_AT(m, j, i) = d;
+    }
+  } 
+}
+
 
 void mat_print(MAT mat, char *name){
    MATH_PRINTF("%s[\n",name);
