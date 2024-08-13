@@ -1,3 +1,16 @@
+/*
+ * mathflow.h
+ * 
+ * Author: Saurabh Gade <gadesaurabh3@gmail.com>
+ * Date: 2024-08-13
+ * Description: This header file defines the MathFlow library for linear algebra operations in C.
+ * 
+ * The MathFlow library provides essential methods for matrix operations, determinants, 
+ * inversion, eigenvalues, eigenvectors, solvers, ...
+ * 
+ * License: MIT License
+ */
+
 #ifndef MATHFLOW
 #define MATHFLOW
 
