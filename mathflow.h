@@ -94,25 +94,26 @@ void mat_copy(MAT dst, MAT src);
 
 
 //Matrix operations.
-//sum of two matrices.
+//sum of two matrices. 'NOTE: ASSERTION ENABLED IF, BOTH MATRICES ARE NOT OF SAME DIMENSIONS.
+
 void mat_sum(MAT dst, MAT src);
 
-//multiplication of two matrices.
+//multiplication of two matrices. 'NOTE: ASSERTION ENABLED IF, COLUMNS OF SRC1 MATRIX IS NOT EQUEL TO ROWS OF SRC2 MATRIX. 
 void mat_dot(MAT dst, MAT src1, MAT src2);
 
 //scale the matrix by given factor;
 void mat_scale(MAT dst, double scalar);
 
-//return equivalent upper traingular matrix of given matrix.
+//return equivalent upper traingular matrix of given matrix.'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
 void mat_utm(MAT dst, MAT src, bool print_steps);
 
-//return equivalent lower traingular matrix of given matrix.
+//return equivalent lower traingular matrix of given matrix.'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
 void mat_ltm(MAT dst, MAT src, bool print_steps);
 
 //returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
 double mat_det(MAT matrix, bool print_steps);
 
-//convert given matrix in it's transpose.
+//convert given matrix in it's transpose.'NOTE: ASSERTION ENABLED IF, COLUMNS OF SRC1 MATRIX IS NOT EQUEL TO ROWS OF SRC2 MATRIX. 
 void mat_transpose(MAT m);
 
 //print matrix.
