@@ -20,6 +20,10 @@
 #define MATH_ASSERT assert
 #endif //MATH_ASSERT
 
+typedef unsigned char bool;
+#define true 0
+#define false 1
+
 typedef struct{
   size_t rows;
   size_t cols;
@@ -82,13 +86,13 @@ void mat_dot(MAT dst, MAT src1, MAT src2);
 void mat_scale(MAT dst, double scalar);
 
 //return equivalent upper traingular matrix of given matrix.
-void UTM(MAT dst, MAT src, unsigned char print_steps);
+void UTM(MAT dst, MAT src, bool print_steps);
 
 //return equivalent lower traingular matrix of given matrix.
-void LTM(MAT dst, MAT src, unsigned char print_steps);
+void LTM(MAT dst, MAT src, bool print_steps);
 
 //returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
-double mat_det(MAT matrix);
+double mat_det(MAT matrix, bool print_steps);
 
 //print matrix.
 void mat_print(MAT mat, char* name);
@@ -188,7 +192,7 @@ void mat_scale(MAT dst, double scalar){
   }
 }
 
-void UTM(MAT dst, MAT src, unsigned char print_steps){
+void UTM(MAT dst, MAT src, bool print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
   MATH_ASSERT(src.rows == dst.rows);  //Dimensions of source must be equal to dimensions of Destination.
@@ -219,7 +223,7 @@ void UTM(MAT dst, MAT src, unsigned char print_steps){
   mat_free(&rx);
 }
 
-void LTM(MAT dst, MAT src, unsigned char print_steps){
+void LTM(MAT dst, MAT src, bool print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
   MATH_ASSERT(src.rows == dst.rows);  //Dimensions of source must be equal to dimensions of Destination.
@@ -247,10 +251,10 @@ void LTM(MAT dst, MAT src, unsigned char print_steps){
 }
 
 
-double mat_det(MAT matrix){
+double mat_det(MAT matrix, bool print_steps){
   double det = 1.0f;
   MAT utm = mat_alloc(matrix.rows , matrix.cols);
-  LTM(utm, matrix, 1);
+  UTM(utm, matrix, print_steps);
   for(size_t i = 0 ; i < matrix.rows; i++){
     det *= MAT_AT(utm,i,i);
   }
