@@ -36,6 +36,8 @@ typedef struct{
 //extra utilitis.
 double rand_double(void);
 
+
+
 //Matrix allocation.
 //only method which can allocate memory.
 MAT mat_alloc(size_t rows, size_t cols);
@@ -56,6 +58,8 @@ void mat_scan(MAT m);
 void mat_free(MAT *m);
 
 
+
+
 //matrix displacement.
 
 //return a matrix pointing to the specific row of given matrix.
@@ -65,20 +69,6 @@ MAT mat_row(MAT m, size_t row);
 void mat_copy(MAT dst, MAT src);
 
 
-//scale the matrix by given factor;
-void mat_scale(MAT dst, double scalar);
-
-//return equivalent upper traingular matrix of given matrix.
-void UTM(MAT dst, MAT src, unsigned char print_steps);
-
-
-//return equivalent lower traingular matrix of given matrix.
-void LTM(MAT dst, MAT src, unsigned char print_steps);
-
-
-//returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
-double mat_det(MAT matrix);
-
 
 
 //Matrix operations.
@@ -87,6 +77,18 @@ void mat_sum(MAT dst, MAT src);
 
 //multiplication of two matrices.
 void mat_dot(MAT dst, MAT src1, MAT src2);
+
+//scale the matrix by given factor;
+void mat_scale(MAT dst, double scalar);
+
+//return equivalent upper traingular matrix of given matrix.
+void UTM(MAT dst, MAT src, unsigned char print_steps);
+
+//return equivalent lower traingular matrix of given matrix.
+void LTM(MAT dst, MAT src, unsigned char print_steps);
+
+//returns the determinant of a squre matrix... 'NOTE: ASSERTION ENABLED IF, MATRIX IS NOT A SQURE MATRIX.
+double mat_det(MAT matrix);
 
 //print matrix.
 void mat_print(MAT mat, char* name);
