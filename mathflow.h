@@ -90,6 +90,8 @@ MAT mat_row(MAT m, size_t row);
 //copies the the in destination. size must be same.  
 void mat_copy(MAT dst, MAT src);
 
+//update row the ith row from the matrix by the given row .
+void mat_update_row(MAT dst, MAT row, size_t i);
 
 //Matrix operations.
 //sum of two matrices. 'WARNING: ASSERTION ENABLED IF, BOTH MATRICES ARE NOT OF SAME DIMENSIONS.
@@ -113,8 +115,14 @@ double mat_det(MAT matrix, bool print_steps);
 
 
 
-// 'TODO: ystem of linear equitions.  
+// 'TODO: system of linear equitions.  
 void mat_sys_linear_eq(MAT ans, MAT lhs, MAT rhs);
+
+// 'TODO: swap two rows from given matrix 
+ void mat_swap_row(MAT m, size_t i, size_t j);
+
+
+
 
 
 //convert given matrix in it's transpose.'WARNING: ASSERTION ENABLED IF, COLUMNS OF SRC1 MATRIX IS NOT EQUEL TO ROWS OF SRC2 MATRIX. 
@@ -341,5 +349,24 @@ void mat_copy(MAT dst, MAT src){
   }
 }
 
+void mat_update_row(MAT dst, MAT row, size_t i){
+  MATH_ASSERT(row.rows == 1);
+  MATH_ASSERT(row.cols == dst.cols);
+  MATH_ASSERT(i < dst.rows);
+  for(size_t j = 0; j < row.cols; j++){
+    MAT_AT(dst, i, j) = MAT_AT(row, 0, j);
+  }
+}
+
+void mat_swap_row(MAT m, size_t i, size_t j){
+  MATH_ASSERT(i < m.rows);
+  MATH_ASSERT(j < m.rows);
+  if(i == j) return;
+  MAT r = mat_alloc(1, m.cols);
+  mat_copy(r, mat_row(m, i));
+  mat_update_row(m, mat_row(m, j), i);
+  mat_update_row(m, r, j);
+  mat_free(&r);
+}
 
 #endif //MATHFLOW_IMPL
