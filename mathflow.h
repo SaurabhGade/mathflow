@@ -93,6 +93,9 @@ void mat_copy(MAT dst, MAT src);
 //update row the ith row from the matrix by the given row .
 void mat_update_row(MAT dst, MAT row, size_t i);
 
+// shuffle matrix such as element at (i,j) should not zero if possible. (show rows) 
+bool mat_shuffle_row(MAT m, size_t i, size_t j);
+
 //Matrix operations.
 //sum of two matrices. 'WARNING: ASSERTION ENABLED IF, BOTH MATRICES ARE NOT OF SAME DIMENSIONS.
 
@@ -237,6 +240,7 @@ void mat_scale(MAT dst, double scalar){
   }
 }
 
+//BUG: needed to fix. STILL BUT NOT FIXED
 void mat_utm(MAT dst, MAT src, bool print_steps){
   MATH_ASSERT(src.rows == src.cols); // given matrix must be the squre matrix.
   
@@ -248,6 +252,8 @@ void mat_utm(MAT dst, MAT src, bool print_steps){
   double f;
   for(size_t i = 0 ; i < dst.rows-1; i++){
     for(size_t j = i+1; j < dst.rows; j++){
+      if(MAT_AT(dst, j, i) == 0) continue;
+      if(MAT_AT(dst, i, j-1) == 0) mat_shuffle_row(m, i, j-1);
       mat_copy(rx, mat_row(dst, i));
       if(MAT_AT(rx, 0, i) == 0)
       f = 0;
@@ -357,6 +363,21 @@ void mat_update_row(MAT dst, MAT row, size_t i){
     MAT_AT(dst, i, j) = MAT_AT(row, 0, j);
   }
 }
+
+bool mat_shuffle_row(MAT m, size_t i, size_t j){
+  MAT_ASSERT(i < m.row);
+  MAT_ASSERT(j, m.cols);
+  if(MAT_AT(m, i, j) =! 0) return true;
+
+  for(size_t k = i+1; k < m.rows; j++){
+    if(MAT_AT(m, k, j) != 0){
+      mat_swap_row(m, i, k);
+      return true;
+    }
+  }
+  return false;
+}
+
 
 void mat_swap_row(MAT m, size_t i, size_t j){
   MATH_ASSERT(i < m.rows);
