@@ -82,6 +82,8 @@ void mat_free(MAT *m);
 
 
 
+
+
 //matrix displacement.
 
 //return a matrix pointing to the specific row of given matrix.
@@ -95,6 +97,14 @@ void mat_update_row(MAT dst, MAT row, size_t i);
 
 // shuffle matrix such as element at (i,j) should not zero if possible. (show rows) 
 bool mat_shuffle_row(MAT m, size_t i, size_t j);
+
+// swap two rows from given matrix 
+ void mat_swap_row(MAT m, size_t i, size_t j);
+
+
+
+
+
 
 //Matrix operations.
 //sum of two matrices. 'WARNING: ASSERTION ENABLED IF, BOTH MATRICES ARE NOT OF SAME DIMENSIONS.
@@ -118,18 +128,17 @@ double mat_det(MAT matrix, bool print_steps);
 
 
 
+//convert given matrix in it's transpose.'WARNING: ASSERTION ENABLED IF, COLUMNS OF SRC1 MATRIX IS NOT EQUEL TO ROWS OF SRC2 MATRIX. 
+void mat_transpose(MAT m);
+
+
+
+
 // 'TODO: system of linear equitions.  
 void mat_sys_linear_eq(MAT ans, MAT lhs, MAT rhs);
 
-// 'TODO: swap two rows from given matrix 
- void mat_swap_row(MAT m, size_t i, size_t j);
 
 
-
-
-
-//convert given matrix in it's transpose.'WARNING: ASSERTION ENABLED IF, COLUMNS OF SRC1 MATRIX IS NOT EQUEL TO ROWS OF SRC2 MATRIX. 
-void mat_transpose(MAT m);
 
 //print matrix.
 void mat_print(MAT mat, char* name);
@@ -213,7 +222,7 @@ void mat_sum(MAT dst, MAT src){
   MATH_ASSERT(dst.cols == src.cols);
   for(size_t i = 0 ; i < dst.rows; i++){
     for(size_t j = 0; j < dst.cols; j++){
-      MAT_AT(dst, i, j) += MAT_AT(src, i, j); 
+      MAT_AT(dst, i, j) += MAT_AT(src, i, j);
     }
   }
 }
@@ -256,7 +265,7 @@ void mat_utm(MAT dst, MAT src, bool print_steps){
     }
     for(size_t j = i+1; j < dst.rows; j++){
       
-      if(!MAT_AT(dst, i, j)) continue;
+     // if(!MAT_AT(dst, i, j)) continue;
       mat_copy(rx, mat_row(dst, i));
       if(MAT_AT(rx, 0, i) == 0)
       f = 0;
@@ -332,7 +341,10 @@ void mat_print(MAT mat, char *name){
    MATH_PRINTF("%s[\n",name);
    for(size_t i = 0 ; i < mat.rows; i++){
      for(size_t j = 0 ; j < mat.cols; j++){
-        MATH_PRINTF("\t  %lf",MAT_AT(mat, i, j));       
+        double ld = MAT_AT(mat, i, j);
+        if(ld >= -(1e-10) && ld <= 1e-10) ld = 0.f;
+        //MATH_PRINTF("\t  %lf",MAT_AT(mat, i, j));       
+        MATH_PRINTF("\t  %lf",ld);      
      }
     MATH_PRINTF("\n");
    }
