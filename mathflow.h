@@ -251,9 +251,12 @@ void mat_utm(MAT dst, MAT src, bool print_steps){
   MAT rx = mat_alloc(1, dst.cols);
   double f;
   for(size_t i = 0 ; i < dst.rows-1; i++){
+    if(MAT_AT(dst, i, i) == 0){ 
+      if(mat_shuffle_row(dst, i, i)) MAT_PRINT(dst);
+    }
     for(size_t j = i+1; j < dst.rows; j++){
-      if(MAT_AT(dst, j, i) == 0) continue;
-      if(MAT_AT(dst, i, j-1) == 0) mat_shuffle_row(m, i, j-1);
+      
+      if(!MAT_AT(dst, i, j)) continue;
       mat_copy(rx, mat_row(dst, i));
       if(MAT_AT(rx, 0, i) == 0)
       f = 0;
@@ -365,11 +368,12 @@ void mat_update_row(MAT dst, MAT row, size_t i){
 }
 
 bool mat_shuffle_row(MAT m, size_t i, size_t j){
-  MAT_ASSERT(i < m.row);
-  MAT_ASSERT(j, m.cols);
-  if(MAT_AT(m, i, j) =! 0) return true;
+  MATH_ASSERT(i < m.rows);
+  MATH_ASSERT(j < m.cols);
 
-  for(size_t k = i+1; k < m.rows; j++){
+  if(MAT_AT(m, i, j)) return true;
+
+  for(size_t k = i+1; k < m.rows; k++){
     if(MAT_AT(m, k, j) != 0){
       mat_swap_row(m, i, k);
       return true;
